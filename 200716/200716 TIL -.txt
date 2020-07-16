@@ -1,0 +1,128 @@
+﻿0715 - 함수의 기본, 지정 및 호출하는 법과 매개변수(parameter), 인자(argument)가 어떤 것인지를 살펴보았음.
+
+1. 함수의 표현식(expression)?
+ 1+1은 2에 대한 표현식임. 2-1도 1에 대한 표현식임.
+ 1===1은? 마찬가지로 결과인 true라는 값에 대한 표현식임. (오호)
+ 
+그렇다면. ex1 page 하단에 있는 sum(2,3) 인자로, 값이 5가 되는 표현식을 만들고 싶다면?
+=> return이 필요함
+
+1-1. 지금도 function sum(left, right){
+ document.write(left+right+'<br>'); 
+ } 까지 갖추고는 있지만, 만일 이렇게 연산된 결과를 다양한 방법으로 사용해야 한다면
+ ex. 결과의 색상이 붉은색으로 출력되게 하고 싶다, 다른 결과의 값도 만들고 싶다 등등
+ (또 변수가 너무너무 많아져서 고생!
+또한 <div> 값은 string이기 때문에 숫자들 또한 string으로 묶여서 좌 -> 우 순서로 합산됨. 순서를 제대로 지정하지 않으면(기존과 같은 코드로 배열하면) 연산이 되질 않음)
+=> 이럴때는 역시 return이지!
+
+1-2. return이 무슨 말이냐면,
+document.write(left+right)로 각 값마다 더하게 만들고, 이것을 style 태그와 함께 엮어서 다룰 수 없는 태그를 접한다거나
+매번 다른 값을 더하면서 다른 명령어를 집어넣을 때 등
+다양한 상황에서 유동적으로 쓸 수 있도록 연산을 돌려놓게 만드는 기능임!
+=> 먼저 출력해 둘 수 있기 때문에 다음 단계에서 큰 문제 없이 활용 가능함!
+
+2. 함수의 활용 (우리의 애정하는 ⁬night_day 코드를 활용해보자...) 
+
+2-1. [리팩토링] 같은 동작을 표현하나 이에 해당하는 코드를 효율적으로 바꾸는 작업
+리팩토링에 대한 중요한 수단 중 하나는 함수죠.
+길~~~다란 코드가 또 1억개가 반복된다고 생각해보세요! ^^(아놔 또 1억개...)
+
+2-2. var target 부터 while 반복문까지 달려있는 night_day 관련 태그를 다시 상부 <script>에 붙여넣고,
+function nightDayHanlder(){}로 지정을 하고
+또한 하단의 onclick 이벤트 란에 nightDayHanlder()를 지정하면, 웹에서 기존에 알던 대로 잘 출력이 되어야지.
+
+어? 잘 안되네?
+(1) function 부분과, 하단의 nightDayHanlder() <- 이 부분에 대한 내용도 비어있고
+(2) function 태그 하단의 this 부분을 self로 바꿔주면
+-> 제대로 다시 실행됨.
+(잘 이해가 안가서 설명 열심히 찾아보는 중... ㅠㅠ)
+
+* self는 스크립트가 실행되는 context의 전역 객체를 반환하는 속성이라고 함(아직도 이해 안됨 ㅋ흐흫....)
+* this는 기본적으로는 전역 객체를 참조하나, 생성자 함수 코드 내부의 this는 새로 생성된 객체를 참조함
+* self는 통상적인 변수 이름, 바깥쪽 this를 참조하기 위해 사용됨. 
+함수 내에서 사용한 self는 매개변수로의 역할
+=> 우선은 function()과 함수 서술 내용에는 self, 이후 함수 값을 출력할 때에는 this가 나온다는 정도로 알아두자
+
+3. 객체(object) 도입
+-> 이런저런 스크립트, 태그, 변수가 만항진 상황에서 서로 연관된 함수와 서로 연관된 변수를 같은 이름으로 그룹화 하는 도구... 정도로 이해해 두면 될 것
+
+3-1. 우선 nightDayHandler function에 있는 var alist = ... 스크립트(컬러 파우더블루/블루 각 1개씩)를 잘 보면
+색상 정보 빼고는 둘다 중뷁임.
+-> function nightDayHandler() 위쪽에 
+function setColor(color<-매개변수){
+ var alist = document.querySelectorAll('a');
+ var i = 0;
+ while{i < alist.length){
+    alist[i].style.color = color;
+    i = i + 1;
+  }
+}
+로 우선 기재해 둠. 
+(무엇이 바뀌었을까? -> color라는 매개변수가 들어간 함수, 그리고 color의 값이 지정값이 아닌 매개변수 color 가 그대로 들어감)
+
+3-2. function setColor가 지정되었으므로
+기존의 반복구문(querySelectorAll ~ + 컬러지정 구문)은 다 지우고
+해당 자리에 setColor('powderblue');, setColor('blue'); 한줄 씩만 적음. 끝!
+-> 기능은 전부 기존과 같이 정상적으로 작동함. 리팩토링 대성공!
+
+3-3. 중간에 있는 target.style.color 구문도 두번 반복되고 있음. 만일 훨씬 더 많은 횟수로 반복된다고 하면
+이 구문도 함수로 처리해두면 좋을듯. 해보자!
+cf) 이미 setColor라는 함수명이 존재하기 때문에 중복되지 않도록 주의해야 함.
+-> function BodySetColor(color)로 설정 후 하단의 target.style.color 줄 대신 BodySetColor('색상'); 입력
+
+3-4. 앗! 버튼을 눌렀더니 왜 화면이 시커멓지!?
+-> 예.. target이 nightDayHandler function 안에 있었는데 바깥에서 부르니까 먹통입니다.
+-> 음.. 그럼 밖에서 target 내용을 불러와야 하니까 그냥 target의 original 값인 document.querySelector를 불러 보죠
+-> function BodySetColor(color){
+ document.querySelector('body').style.color = color;
+} 로 수정해보았읍니다.
+ => 해결! backgroundColor 구문도 똑같이 해결 봅시다. 굳.
+
+3-5. 훼이크임 사실... 객체를 도입해서 객체를 사용하는 쪽의 코드 또한 손대볼 것임.
+ex. Body, Links 등의 객체를 만들어볼 것
+
+3-6. 객체 또한 일종의 폴더라는 개념으로 이해해도 괜찮음.
+3-7. 사실 그동안 쓰던 document.write 중 document도 객체였음 ㅋ
+ querySelector() 또한 document라는 객체에 속해있던 함수 -> 메소드(method)였음. ㅎㅎ
+
+4. 객체 진짜 배우기
+4-1. 배열은 순서에 따라 정리정돈된다는 특징이 있음. 
+객체는 별도의 순서 없이 정리정돈될 수 있음. 이름이 있는 정리정돈 상자로 생각하면 됨.
+4-2. 배열은 대괄호, 객체는 중괄호!
+ var coworkers = {
+  "programmer":"egoing",
+  "designer":"leezche"
+ };
+이런 식으로 객체를 설정하면 카테고리와 내용을 지정하는 형태로 데이터를 지정할 수 있음.
+하단에 document.write("programmer : "+coworkers.programmer);로 기재
+(. <- dot 은 'Object Access Operator'라고 부르며, 앞선에 있는 객체로 접근하는 오퍼레이터라고 함)
+
+=> 객체를 만드는 방법과, 만들어져 있는 객체에서 데이터를 가져오는 방법을 살펴보았읍니다.
+
+4-3. 객체가 만들어져 있는 상황에서 객체를 추가하고 싶다면
+해당 객체가 추가되는 란에 배열 종류.카테고리 = "내용"; 기재.
+document.write 부분은 기존과 같이 적으면 됨
+
+4-4. 생성된 객체 안에 생성된 데이터를 모두 가져와야 하는 경우가 있음. -> 반복문으로
+for(var key in coworkers){
+ document.write(key+'<br>');
+}
+-> coworkers라는 변수가 가리키는 객체에 있는 모든 key 값들을 가져오는 반복문임
+(key 값이란 내용을 정의한 카테고리를 말하는 것임 ex. programmer, designer 등)
+(cf. 배열에서는 순서대로 되어 있어서 index로 명칭)
+& coworkers에 있는 key 값들 하나하나를 변수값으로 세팅해준다는 말입니당.
+
+4-5. 위의 구문에 더하여
+  for(var key in coworkers) {
+  document.write(key+' : '+coworkers[key]+'<br>');
+}
+이렇게 적으면 -> key 값 + key 과 함께 설정되었던 데이터도 동시에 출력된다.
+
+5. 객체에는 함수도 담을 수 있습니다 (쟈쟌~)
+coworkers.showAll = function(){} 방식의 함수를 사용함
++   for(var key in coworkers) {
+  document.write(key+' : '+coworkers[key]+'<br>');
+} 코드를 그대로 붙여넣고
+하단에 coworkers.showAll();을 기재하면 됨.
+
+(복습할 시간이 모자라서 여기까지만!)

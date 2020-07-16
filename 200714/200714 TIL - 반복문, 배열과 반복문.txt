@@ -1,0 +1,31 @@
+TIL, 생활코딩
+1. 반복문
+ var - 변수 지정
+ while() - 하기 기술한 반복문 내의 코드가 설정되는 조건 값을 설정, 값 하단에 조건문도 설정
+ while, var, 조건문 세 가지를 고려하여 while 구문 괄호 안의 내용이 true로 유지될 때 까지만 반복문이 실행되는 것
+ex)
+ var i = 0;
+ while (i < 3){
+ document.write('<li>2</li>');
+ document.write('<li>3</li>');
+ i = i + 1;
+ }
+
+1-1. 만일 while 구문 괄호 하단에 ex.
+ var i = 0;
+ while (i < 3){
+ document.write('<li>2</li>');
+ document.write('<li>3</li>');
+ i = i + 1;
+ }
+ document.write('<li>4</li>');
+ 가 추가로 적혀있었다면
+ while이 false로 판단되어 반복문이 그칠 때, 추가로 적혀있던 구문이 들어감 (더이상 while이 true가 아니므로 실행 X)
+
+2. 배열과 반복문
+ List ex. 동료 이름 목록 등을 만들 때 내용이 너무 많거나 반복된다면 일일히 <ul><li>로 리스트를 만들기 어려움
+-> 배열만 만들어 두고 내용이 출력되도록 반복함
+
+ var를 통해 배열을 생성하고, while 반복문에 들어갈 조건도 설정하면 됨
+ while(i < coworkers.length) 라고 하면 인원수가 바뀐다고 해서 코드를 계속 수정할 필요가 없어짐!!
+ & document.write('<li>'+coworkers[i]+'</li>');
