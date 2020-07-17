@@ -1,0 +1,101 @@
+﻿0716 - 5번 중에서 
+
+coworkers.showAll = function(){} 수식 적고
+하단에 coworkers.showAll();을 하면 모든 저장되어 있던 객체 데이터가 출력된다.
+cf) 만일 coworkers라는 단어가 바뀌게 된다면 어떻게 해야할까?
+-> 미연에 방지하기 위해 for var key in this) {
+ document.write(key+' : '+this[key]+'<br>');
+} 로 수식 내용을 바꾸면 됨.
+이렇게 되면 위의 var 이름이 coworkers에서 바뀌더라도 영향을 받지 않게 됨
+(this -> 기재되어있는 함수에 소속되어 있는 객체를 가리키는 용어)
+
+=> 객체에 소속되어 있는 함수는 Method(메서드)라고 합니다.
+ex.  document.querySelector('body') 에서의 querySelector가 Method (document는 객체)
+=> 객체에 소속되어 있는 변수는 Property라고 합니다. 주로 { } 내부의 설정값
+
+1. 객체 활용해보기
+
+1-1. 지난 function 중 Body 색 변경 & 배경색 변경에 대한 함수들을 다시 바꿔보자
+-> Body라는 변수를 기재하고 해당 변수에 객체를 담는 과정
+ var Body = {
+  setColor:function (color){
+  (이 자리엔 기존에 적어놨던) document.querySelector('body').style.color = color;
+  }
+} 로 지정, BackgroundColor 부분도 똑같이 바꿔주자.
+
+1-2. 
+음 ㄱ-? 동작하지 않는걸?
+-> 객체의 property 사이를 구분할 때는 콤마 기호가 필수임!
+그래도 동작하지 않는데..?
+-> 하단의 BodySetBackgroundColor / BodySetColor 명령어가 바뀌었음!
+(Body라는 객체를 1-1에서 직접 지정해 주었기 때문에 Body.setColor 등으로 구문을 수정해주면 정상 동작함 ㅎㅎ)
+
+1-3. 같은 방법으로 LinksSetColor 부분도 객체화 시켜보자
+Body. 에서와 같이 Links. 도 객체화 시킬것이기 때문에, 추후 등장하는 LinksSetColor 부분을 
+ex. Links.setColor 등으로 수정해 두고
+var Links = {} <- 이 부분에는 기존에 지정해둔 LinksSetColor function 내용을 그대로 옮기면 됨.
+cf) var Links, var Body 안의 property는 function 이름을 SetColor로 하는 것이기 때문에
+내용은 setColor:function (color)로 두고 {} 지정하면 됩니다.
+(추측하기로는 같은 setColor~ 더라도 앞에 각각 다른 객체(Body, Links)가 합쳐지기 때문에 다르게 작동해서 그런게 아닐까 싶음)
+
+2. (중간정리) 궁금해 할만한 무언가.
+ex. 함수: 코드가 많아지면 정리정돈하는 도구임.
+ex2. 객체: 함수 및 변수가 많아지면 연관된 것들을 그룹핑해서 정리정돈하는 도구임.
+-> 그럼 객체가 많아지면 ..? 객체를 기껏 정리해놨더니 그걸 정리정돈한 도구가 또 많아지면...? (뷁)
+=> (파일로 쪼개기....스포 읍읍)
+
+3. 그룹핑 - 서로 연관된 코드들을 파일로 묶음
+ex. 이쁘게 만들어 둔 input 호출 코드를 다른 html에 붙여넣으면 어떻게 될까?
+-> 당연히 작동 안하지 ㄱ- JS가 같이 들어간것도 없는데 그쵸?
+-> 그럼 세팅값이 다 들어있는 JS를 복붙. 그럼 뭐 당연히 잘 동작하겠지..
+근데. 우리가 가지고 있는 페이지가 1억개라면? ^^^...후후...
+or 모든 웹페이지에 있는 링크 색 값을 동시에 노랑색으로 바꾸고 싶다면.... 허허허
+
+=> 파일로 쪼개버립시다! ex. color.js
+3-1. JS 값만 파일로 쪼개서 호출하기
+하고 -> js 파일에 붙여넣으려고 했던 코드 모두 붙여넣고 & <script> 태그 삭제
+하고 -> 붙여넣으려고 했던 타겟 파일에서 <script></script> 부분을
+ <script src="colors.js"></script>입력
+하면 -> JS 전체를 붙여넣은 것과 100% 일치하는 결과가 나옴!!(와우~)
+이걸 -> 해당 페이지를 열고 F12 -> Network 탭을 누르고 refresh 버튼을 눌러 보면
+이게 -> grouping1.html 페이지가 있고, 컬러 지정 값에 해당하는 부분은 colors.js에서 따온다는 것을 명확히 알 수 있음(!!!)
+=> 다른 파일들에 똑같이 script src를 입력하여 간편하게 지정값 파일을 불러올 수 있답니다.
+cf) 특정 웹페이지가 불러올 js 파일은 같은 디렉토리에 있어야 함. (직접 지정하는 것도 가능은 하겠지만 무지 번거롭겠죠)
+
+3-2. + 또 좋은 점?
+웹페이지를 로드할 때 메인 -> 메뉴 클릭시 html 2번 + js 까지 로딩해야 함.
+-> 접속이 많네? 근데 좋음. (응?) 
+-> cache! 웹에 한번 다운된 파일들은 컴퓨터에 저장되어 있어서 새로이 열리는 브라우저만 갱신하게 됨
+
+4. library & framework - 둘다 다른 사람의 도움을 받아 S/W를 만드는 개념임
+library
+ - 내가 만들고자 하는 프로그램의 부품이 되는 S/W(잘 정리정돈 된 S/W) - 사용할 부품을 가져오는 느낌
+ -> 땡겨와서 쓰는 느낌
+framework
+ - 만들고자 하는 것이 있을 때 무엇을 만드느냐에 따라 (ex. 게임, 웹, 채팅)
+ 만들고자 하는 공통점이나 / 각기 프로그램에 따른 차이점도 있을 것인데
+ 공통적인 부분은 framework가 만들어 두고, 우리는 달라지는 부분만 조금씩 수정하면서
+ -> 만들고자 하는 것은 처음부터 끝까지 손을 댈 필요가 없음(거진 반제품같은 느낌)
+ -> Framework 안에 들어가서 작업하는 느낌에 가까움
+=> 둘다 다른 사람들과 협력하는 느낌입니다
+
+4-1.
+Library
+ JS의 큰 library는 jQuery - 매우 크고 안정적임. 생산성 무진장 증대 가능
+맛보기 - jquery 검색 - 사이트에서 CDN(Content Delivery Network) 검색하여 해당 파일 다운
+(파일은 따로 서버에 들어있고 우리는 script src로 끌어만 옴. 사용료 안내네 개이득!)
+ex. Google jQuery 3.x snippet 복사, 아까의 grouping1. html에서 script src 윗줄에 붙여넣음
+ -> 어머 이걸로 설치 끝이라구요?! ㄱ-
+
+4-2. colors.js 에서 Ctrl + / 커맨드로 불필요해진 코드들을 정리하고
+아랫줄에 $('a') 입력 -> 웹 페이지 내의 모든 'a' 태그를 jQuery로 컨트롤한다는 명령어!
+& jQuery에서 css를 바꾸고 싶은 함수를 쓴다면?
+ $('a').css('color', color); 라고만 적으면 끝(헐)
+-> 앞부분의 'color'는 css style color 부분이고, 뒤의 color는 function 상의 매개변수를 말하는 것이랍니다.
+
+4-3. jQuery는 새로운 언어가 아니라, JS를 이용해서 우리대신 jQuery가 CSS라는 함수를 만들어준 것 뿐임
+
+4-4. 하단의 var Body의 document. 부분도 똑같이 $('body').css('color', color);로
+그 아래도 $('body').css('backgroundcolor', color);로! (오메...)
+
+4-5. 각 페이지에 해당 jQuery script src를 붙여넣으면 똑같이 jQuery 활용을 가능하게 해줍니다 호호호
