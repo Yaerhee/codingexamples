@@ -1,0 +1,103 @@
+200709
+ - input type, button, value, onclick 이벤트 지정
+ - onclick 이벤트 사이에 document.querySelector body로 지정 + style.color/backgroundColor 지정
+ - 스타일 태그 중 클래스 지정 ex. .js{}, 아이디 지정 ex. #first{}, 기본 span 서식 지정 ex. span{}
+
+200713
+ - document.write 조건식 (비교 with ===, 1<2 등)
+ - if 구문: if(true){}else{} / if(false){}else{}
+ - input ID를 설정하고, if(document.querySelector(#해당ID). value === 'night'){} else {} 구문 설정
+ - 나아가 var target = document.querySelector('body')로 지정 후 target.style.color = 'white'; 및
+ this.value = 'day'; 등으로 지정된 쿼리로 간단하게 호출
+ - 배열 설정, 배열 안의 데이터 호출, 배열에 데이터 추가 및 배열 속 데이터의 길이 측정
+
+200714
+ - var로 설정한 변수를 기반으로 while 반복문 작성, 반복문 스크립트만 횟수 지정하여 반복하도록 함
+ - var coworkers 배열 생성 후,
+ while(i < coworkers.length) {
+ document.write('<li>'+coworkers[i]+'</li>')
+ i = i + 1;
+ }로 구성된 반복문으로 배열의 내용 수만큼 반복되는 구문 생성
+
+200715
+ - 기존의 배열 길이만큼 반복되던 반복문에 a href를 더하여, 반복문 내용이 덧붙여진 자동 링크 완성 반복문 구현
+ - night/ day button 구문에 var alist = document.querySelectorAll('a'); 로 하이퍼링크 전체를 지정해 두고,
+ while 반복문으로 모든 a href의 style을 차례차례 지정하도록 지시하는 방법도 있음.
+ (var alist = ... & var i = 0; & while(i < alist.length){... i = i + 1;)}
+ - body 상단에 (head 쪽에) script로 function 지정해두고, 관련한 변수 및 반복문 구문을 모두 올려놓으면
+ 하단의 input onclick event 부분에 단순 function 이름으로 똑같은 결과의 출력물을 구현할 수 있다.
+cf) 단, function nightDayHandler(self){} 이고 해당 function 호출 시엔 nightDayHandler(this)로 불러와야 한다.
+ - function 이름(){} 의 식을 지정해두고 간단히 호출하여 작동시키는 방법
+ex) function sum(left, right){} -> left, right은 매개변수(parameter),
+ sum (2,3); -> 2,3은 인자(argument)라고 칭함
+
+200716
+ - 함수를 규정하는 내용에 div style을 넣으면 left+right가 제대로 적용되지 않음
+ <div style> + left + right + </div>로 연결해야 하는데, <div style> 때문에 전부 string+string 관계가 되어버림
+ -> 이럴땐 function 지정은 left,right만 해두고 아래에 return left+right으로 먼저 묶어두는 것이 좋음.
+ -> document.write('<div style="color:red">'+sum2(2,3)+'</div>'); 와 같이 구문을 적으면
+ 함수 이름을 호출하여 합산하게 되는 것이므로 연산에 영향을 받지 않음(연산 된 상태로 div가 적용되어서)
+ - 반복되는 구문들도 함수로 묶을 수 있음.
+ ex) function BodySetColor/BodySetBackgroundColor(color){
+  document.querySelector('body').style(.backgroundColor).color = color;
+} 를 깔아놓으면, var target 변수를 지정했던 것보다 더 깔끔하게 body에 대한 속성을 지정할 수 있다.
+ (추후 호출 시 BodySetColor/BodySetBackgroundColor('색상'); 으로 간단하게 구문을 마칠 수 있음)
+ cf) this.value 였던 부분은 -> self.value로 바꿔줘야함(주의)
+
+ - var 변수의 카테고리 지정에서 ex. coworkers, 데이터 값에 대한 카테고리로 묶어서 객체 데이터를 삽입할 수 있음.
+ ex) var coworkers = {
+ "programmer":"egoing",
+ "designer":"leezche"
+ }; (객체가 변수 안에 담겨있는 모습)
+ - 호출할 시 document.write("programmer" : "+coworkers.programmer+"<br>");와 같이 기재
+ - 데이터를 추가할 시 coworkers.bookkeeper = "duru"; 처럼 var 이름.카테고리 = "데이터"; 로 삽입
+ - 카테고리에 띄어쓰기가 있을 경우 ex. coworkers["data scientist"] = "taeho"; 처럼 기재
+  -> 호출할 경우 document.write("data scientist : "+coworkers["data scientist"]+"<br>"); 와 같이 기재
+ - 모든 데이터를 반복하여 호출 시 for문 
+ ex for(var key in coworkers) {
+  document.write(key+' : ' +coworkers[key]+'<br>');
+ } 구문으로 지정되어 있는 데이터 호출
+ - 객체에는 함수도 담을 수 있음
+ ex. coworkers.showAll = function(){
+  for(var key in coworkers) {
+  document.write(key+' : '+coworkers[key]+'<br>');
+ }
+}
+
+200717
+ - 만일 'coworkers'라는 단어가 바뀌게 되는 현상을 고려한다면
+ -> coworkers.showAll = function(){
+  for(var key in this) {
+  document.write(key+' : '+this[key]+'<br>');
+ }
+} 로 구문을 수정하여 "this"로 직접 해당 카테고리를 가리키도록 하는 방법도 있음
+
+ - function - body 및 body background 색 변경에 대한 함수 재구성
+  var Body = {
+  setColor:function (color){
+  document.querySelector('body').style.color = color;
+ }, //property 사이에 콤마 기호로 구분은 필수임!//
+  setBackgroundColor:function (color){
+  document.querySelector('body').style.backgroundColor = color;
+ }
+} 와 같은 구문으로 객체를 담은 변수를 세팅할 수 있으며, 함수대신 해당 객체를 직접 호출하여 다른 구문을 수정할 수도 있다:
+ ex. function nightDayHandler(self){
+  if(self.value === 'night'){
+  Body.setBackgroundColor('black')
+  Body.setColor('white')
+  self.value = 'day';
+  Links.setColor('powderblue');
+} -> 이렇게 하면 객체.function(){} 중 function 이름이 같더라도, 다른 객체와 맞물리기 때문에 var 안에 들어있는 프로퍼티를 기반으로 개별 작동시킬 수 있음.
+
+ - JS 지정값 부분만 .js 확장자의 파일로 저장할 수 있음
+ - 해당 내용만 crop하여 js파일로 저장하고, 기존 파일들에 있는 <script> 태그는 삭제
+  & <script src='colors.js"></script> 입력 => 기존 script들이 들어있었을 때의 결과물과 똑같이 출력됨
+ => html과 js를 로딩하는 것이 되지만 캐시 덕분에 새로이 열리는 브라우저만 갱신하는 셈이 된다.
+
+ - JQuery : 웹에 들어가서 파일 다운 or script src로 웹상에서 활용 가능한 환경을 구축
+ - JQuery 지원 되는 JS 파일 내에서는 간단하게 $('호출할 태그 계열').css('color', color); 와 같이 호출이 가능함
+ ex. var Links = {
+  setColor:function (color){
+  $('a').css('color', color);
+ }
+}
