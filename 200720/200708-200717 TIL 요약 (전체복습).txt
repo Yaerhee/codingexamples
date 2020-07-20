@@ -53,7 +53,7 @@ ex) function sum(left, right){} -> left, right은 매개변수(parameter),
  - 데이터를 추가할 시 coworkers.bookkeeper = "duru"; 처럼 var 이름.카테고리 = "데이터"; 로 삽입
  - 카테고리에 띄어쓰기가 있을 경우 ex. coworkers["data scientist"] = "taeho"; 처럼 기재
   -> 호출할 경우 document.write("data scientist : "+coworkers["data scientist"]+"<br>"); 와 같이 기재
- - 모든 데이터를 반복하여 호출 시 for문 
+ - 모든 데이터를 반복하여 호출 시 for문
  ex for(var key in coworkers) {
   document.write(key+' : ' +coworkers[key]+'<br>');
  } 구문으로 지정되어 있는 데이터 호출
